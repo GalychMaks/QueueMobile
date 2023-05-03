@@ -1,6 +1,5 @@
 package com.example.myqueue;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,11 +12,7 @@ import android.widget.Toast;
 
 import java.util.regex.Pattern;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.AndroidEntryPoint;
-
-public class MainActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
     private TextView txtEmailError, txtUserNameError, txtPasswordError, txtConfirmPasswordError, txtLogIn;
     private EditText editTextEmail, editTextUserName, editTextPassword, editTextConfirmPassword;
     private Button btnSignUp;
@@ -25,14 +20,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_signup);
 
         initViews();
 
         txtLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
                 startActivity(intent);
             }
         });
@@ -45,14 +40,14 @@ public class MainActivity extends AppCompatActivity {
                         && validateName(editTextUserName.getText().toString())
                         && validatePassword(editTextPassword.getText().toString(), editTextConfirmPassword.getText().toString())) {
 
-                    Utils utils = Utils.getInstance(MainActivity.this);
+                    Utils utils = Utils.getInstance(SignUpActivity.this);
 
                     if(utils.addUser(new User(editTextEmail.getText().toString(),
                             editTextUserName.getText().toString(),
                             editTextPassword.getText().toString()))){
 
-                        Toast.makeText(MainActivity.this, "Account created", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(MainActivity.this, QueueListActivity.class);
+                        Toast.makeText(SignUpActivity.this, "Account created", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SignUpActivity.this, QueueListActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -65,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             txtEmailError.setText("Invalid email");
             txtEmailError.setVisibility(View.VISIBLE);
             return false;
-        } else if (Utils.getInstance(MainActivity.this).findUserByEmail(email) != null) {
+        } else if (Utils.getInstance(SignUpActivity.this).findUserByEmail(email) != null) {
             txtEmailError.setText("Email is already taken");
             txtEmailError.setVisibility(View.VISIBLE);
             return false;
