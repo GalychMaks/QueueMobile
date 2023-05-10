@@ -1,7 +1,7 @@
 package com.example.myqueue;
 
 
-import static com.example.myqueue.QueueActivity.QUEUE_ID_KEY;
+import static com.example.myqueue.Utils.QUEUE_ID_KEY;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

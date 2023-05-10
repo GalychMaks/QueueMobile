@@ -4,21 +4,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QueueActivity">
+    tools:context=".QueueActivity"
+    android:background="#808080">
 
-    <TextView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardQueueName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardNumberOfMembers"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:padding="20dp"
-        android:text="text"
-        android:id="@+id/txtQueueName"/>
+        app:layout_constraintRight_toLeftOf="@+id/cardNumberOfMembers"
+        app:layout_constraintTop_toTopOf="@id/cardNumberOfMembers">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Queue Name" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardNumberOfMembers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:cardCornerRadius="30dp"
+        app:layout_constraintLeft_toRightOf="@+id/cardQueueName"
+        app:layout_constraintRight_toLeftOf="@+id/cardDescription"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="3"
+            android:textSize="20dp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardNumberOfMembers"
+        app:layout_constraintLeft_toRightOf="@+id/cardNumberOfMembers"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cardNumberOfMembers">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@id/txtDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Description"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_more"
+                app:layout_constraintBottom_toBottomOf="@+id/txtDescription"
+                app:layout_constraintLeft_toRightOf="@+id/txtDescription"
+                app:layout_constraintTop_toTopOf="@+id/txtDescription" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recViewParticipantList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/txtQueueName"
-        android:id="@+id/recViewParticipantList"/>
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardNumberOfMembers" />
 
+    <Button
+        android:id="@+id/btnJoinTisQueue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:text="Join this queue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

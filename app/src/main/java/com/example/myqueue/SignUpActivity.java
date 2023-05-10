@@ -1,26 +1,34 @@
 package com.example.myqueue;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myqueue.databinding.ActivitySignupBinding;
+
 import java.util.regex.Pattern;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends DrawerActivity {
     private TextView txtEmailError, txtUserNameError, txtPasswordError, txtConfirmPasswordError, txtLogIn;
     private EditText editTextEmail, editTextUserName, editTextPassword, editTextConfirmPassword;
     private Button btnSignUp;
+    private ActivitySignupBinding activitySignupBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        activitySignupBinding = ActivitySignupBinding.inflate(getLayoutInflater());
+        setContentView(activitySignupBinding.getRoot());
 
         initViews();
 
@@ -47,6 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
                             editTextPassword.getText().toString()))){
 
                         Toast.makeText(SignUpActivity.this, "Account created", Toast.LENGTH_SHORT).show();
+                        Utils.getInstance(SignUpActivity.this).setIsLoggedIn(true);
                         Intent intent = new Intent(SignUpActivity.this, QueueListActivity.class);
                         startActivity(intent);
                     }
@@ -109,5 +118,12 @@ public class SignUpActivity extends AppCompatActivity {
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
 
         btnSignUp = findViewById(R.id.btnSignUp);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, QueueListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

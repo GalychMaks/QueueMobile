@@ -10,13 +10,15 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class Utils {
+    public static final String QUEUE_ID_KEY = "queueId";
     public static final String ALL_USERS_KEY = "all_users";
     public static final String ALL_QUEUES_KEY = "all_queues";
+    public static final String IS_LOGGED_IN = "is_logged_in";
     private static Utils instance;
     private SharedPreferences sharedPreferences;
 
     public static Utils getInstance(Context context) {
-        if(null != instance) {
+        if (null != instance) {
             return instance;
         }
         instance = new Utils(context);
@@ -27,18 +29,33 @@ public class Utils {
 
         sharedPreferences = context.getSharedPreferences("alternate_db", Context.MODE_PRIVATE);
 
-        if(null == getUserList()){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(IS_LOGGED_IN, false);
+        editor.commit();
+
+        if (null == getUserList()) {
             initUsers();
         }
-        if(null == getQueueList()){
+        if (null == getQueueList()) {
             initQueues();
         }
+
+    }
+
+    public boolean isLoggedIn() {
+        return sharedPreferences.getBoolean(IS_LOGGED_IN, false);
+    }
+
+    public void setIsLoggedIn(boolean isLoggedIn) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(IS_LOGGED_IN, isLoggedIn);
+        editor.commit();
     }
 
     public boolean addUser(User user) {
         ArrayList<User> userList = getUserList();
-        if(null != userList) {
-            if(userList.add(user)) {
+        if (null != userList) {
+            if (userList.add(user)) {
                 Gson gson = new Gson();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove(ALL_USERS_KEY);
@@ -52,8 +69,8 @@ public class Utils {
 
     public boolean addQueue(Queue queue) {
         ArrayList<Queue> queueList = getQueueList();
-        if(null != queueList) {
-            if(queueList.add(queue)) {
+        if (null != queueList) {
+            if (queueList.add(queue)) {
                 Gson gson = new Gson();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove(ALL_QUEUES_KEY);
@@ -82,7 +99,7 @@ public class Utils {
         queueList.add(new Queue("Algorithms", "Lorem ipsum", "2"));
         Queue queue = new Queue("OOP", "queue for OOP", "1");
         ArrayList<User> userList = getUserList();
-        for(User user : userList) {
+        for (User user : userList) {
             queue.addParticipant(user);
         }
         queueList.add(queue);
@@ -95,7 +112,8 @@ public class Utils {
 
     public ArrayList<User> getUserList() {
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<User>>(){}.getType();
+        Type type = new TypeToken<ArrayList<User>>() {
+        }.getType();
         ArrayList<User> users = gson.fromJson(sharedPreferences.getString(ALL_USERS_KEY, null), type);
         return users;
     }
@@ -109,9 +127,9 @@ public class Utils {
 
     public User findUserByEmail(String email) {
         ArrayList<User> userList = getUserList();
-        if(null != userList){
-            for(User user : userList) {
-                if(user.getEmail().equals(email)) {
+        if (null != userList) {
+            for (User user : userList) {
+                if (user.getEmail().equals(email)) {
                     return user;
                 }
             }
@@ -121,8 +139,8 @@ public class Utils {
 
     public Queue getQueueByName(String name) {
         ArrayList<Queue> queueList = getQueueList();
-        for(Queue q : queueList) {
-            if(q.getName().equals(name)) {
+        for (Queue q : queueList) {
+            if (q.getName().equals(name)) {
                 return q;
             }
         }
