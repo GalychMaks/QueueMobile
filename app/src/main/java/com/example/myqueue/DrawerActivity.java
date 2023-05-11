@@ -7,6 +7,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,10 @@ import java.util.Objects;
 
 public class DrawerActivity extends AppCompatActivity {
     ActionBarDrawerToggle actionBarDrawerToggle;
+    public static final String IS_LOGGED_IN = "com.example.myqueue.IS_LOGGED_IN";
+    private SharedPreferences sharedPreferences;
+    private NavigationView navigationView;
+
     @Override
     public void setContentView(View view) {
         DrawerLayout drawerLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_drawer, null);
@@ -35,7 +40,16 @@ public class DrawerActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        NavigationView navigationView = drawerLayout.findViewById(R.id.navView);
+        navigationView = drawerLayout.findViewById(R.id.navView);
+
+        sharedPreferences = this.getSharedPreferences("user", MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(IS_LOGGED_IN, true);
+        editor.commit();
+
+        setDrawerMenu();
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -46,7 +60,9 @@ public class DrawerActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.nav_createQueue:
-                        startActivity(new Intent(DrawerActivity.this, CreateQueueActivity.class));
+                        Toast.makeText(DrawerActivity.this, "Don't touch it", Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        //startActivity(new Intent(DrawerActivity.this, CreateQueueActivity.class));
                         break;
                     case R.id.nav_profile:
                     case R.id.nav_favoriteQueues:
@@ -58,16 +74,23 @@ public class DrawerActivity extends AppCompatActivity {
                     case R.id.nav_logIn:
                         startActivity(new Intent(DrawerActivity.this, LogInActivity.class));
                         break;
+                    case R.id.nav_logOut:
+                        SharedPreferences.Editor editor = sharedPreferences.edit().putBoolean(IS_LOGGED_IN, false);
+                        editor.commit();
+                        setDrawerMenu();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
                 }
                 return true;
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
-        } else if(item.getItemId() == R.id.btnSearch){
+        } else if (item.getItemId() == R.id.btnSearch) {
             Toast.makeText(this, "search yourself", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
@@ -78,5 +101,15 @@ public class DrawerActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_menu, menu);
         return true;
+    }
+
+    protected void setDrawerMenu(){
+        if (sharedPreferences.getBoolean(IS_LOGGED_IN, false)) {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.main_menu);
+        } else {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.main_menu_login);
+        }
     }
 }

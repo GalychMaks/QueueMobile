@@ -1,25 +1,36 @@
 package com.example.myqueue;
 
-public class User {
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    private final String email, name, password;
-    private final int id;
-    private static int count;
-    public User(String email, String name, String password) {
-        this.email = email;
+@Entity(tableName = "user_table")
+public class User {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+    private String name;
+    private String email;
+    private String password;
+
+    public User(String name, String email, String password) {
         this.name = name;
+        this.email = email;
         this.password = password;
-        this.id = count;
-        count++;
     }
 
-    public int getId() {return id;}
-    public String getEmail() {
-        return email;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {

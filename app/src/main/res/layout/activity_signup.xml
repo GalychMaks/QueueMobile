@@ -21,11 +21,11 @@
         android:id="@+id/txtSignUp2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="Create an account to enjoy all the services for free!"
         app:layout_constraintEnd_toEndOf="@+id/txtSignUp1"
         app:layout_constraintStart_toStartOf="@+id/txtSignUp1"
-        app:layout_constraintTop_toBottomOf="@+id/txtSignUp1"
-        android:layout_marginTop="15dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/txtSignUp1" />
 
 
     <com.google.android.material.card.MaterialCardView
@@ -33,14 +33,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
         android:layout_marginTop="40dp"
+        android:layout_marginRight="60dp"
         app:cardCornerRadius="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/txtSignUp2"
         app:layout_constraintLeft_toLeftOf="@+id/txtSignUp2"
-        app:layout_constraintRight_toRightOf="@+id/txtSignUp2">
+        app:layout_constraintRight_toRightOf="@+id/txtSignUp2"
+        app:layout_constraintTop_toBottomOf="@+id/txtSignUp2">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -52,32 +52,32 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_email"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:src="@drawable/ic_email" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <EditText
                 android:id="@+id/editTextEmail"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/icEmail"
                 android:hint="Enter your email address"
                 app:layout_constraintLeft_toRightOf="@+id/icEmail"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txtEmailError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="wrong email"
-                app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
-                app:layout_constraintLeft_toLeftOf="@+id/editTextEmail"
                 android:layout_marginLeft="5dp"
+                android:text="wrong email"
+                android:textColor="@color/red"
                 android:visibility="gone"
-                android:textColor="@color/red"/>
+                app:layout_constraintLeft_toLeftOf="@+id/editTextEmail"
+                app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -86,14 +86,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="60dp"
         app:cardCornerRadius="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/email"
         app:layout_constraintLeft_toLeftOf="@+id/email"
         app:layout_constraintRight_toRightOf="@+id/email"
-        android:layout_marginTop="20dp">
+        app:layout_constraintTop_toBottomOf="@+id/email">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -105,32 +105,32 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_user"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:src="@drawable/ic_user" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <EditText
                 android:id="@+id/editTextUserName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/icUser"
-                android:hint="Enter your user name"
+                android:hint="Enter your user1 name"
                 app:layout_constraintLeft_toRightOf="@+id/icUser"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txtUserNameError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="wrong name"
-                app:layout_constraintTop_toBottomOf="@+id/editTextUserName"
-                app:layout_constraintLeft_toLeftOf="@+id/editTextUserName"
                 android:layout_marginLeft="5dp"
+                android:text="wrong name"
+                android:textColor="@color/red"
                 android:visibility="gone"
-                android:textColor="@color/red"/>
+                app:layout_constraintLeft_toLeftOf="@+id/editTextUserName"
+                app:layout_constraintTop_toBottomOf="@+id/editTextUserName" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -139,16 +139,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="60dp"
         app:cardCornerRadius="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/userName"
         app:layout_constraintLeft_toLeftOf="@+id/userName"
         app:layout_constraintRight_toRightOf="@+id/userName"
-        android:layout_marginTop="20dp">
+        app:layout_constraintTop_toBottomOf="@+id/userName">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
 
             <ImageView
                 android:id="@+id/icSignUpLock"
@@ -158,33 +159,34 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_lock"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:src="@drawable/ic_lock" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <EditText
                 android:id="@+id/editTextPassword"
-                android:inputType="textPassword"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/icUser"
+                android:layout_toRightOf="@+id/icSignUpLock"
                 android:hint="Enter your password"
+                android:inputType="textPassword"
                 app:layout_constraintLeft_toRightOf="@+id/icSignUpLock"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txtPasswordError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="wrong password"
-                app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
-                app:layout_constraintLeft_toLeftOf="@+id/editTextPassword"
                 android:layout_marginLeft="5dp"
+                android:text="wrong password"
+                android:textColor="@color/red"
                 android:visibility="gone"
-                android:textColor="@color/red"/>
+                app:layout_constraintLeft_toLeftOf="@+id/editTextPassword"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
+
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -193,14 +195,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="60dp"
         app:cardCornerRadius="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/password"
         app:layout_constraintLeft_toLeftOf="@+id/password"
         app:layout_constraintRight_toRightOf="@+id/password"
-        android:layout_marginTop="20dp">
+        app:layout_constraintTop_toBottomOf="@+id/password">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -212,67 +214,66 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_lock"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:src="@drawable/ic_lock" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <EditText
                 android:id="@+id/editTextConfirmPassword"
-                android:inputType="textPassword"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/icUser"
+                android:layout_toRightOf="@+id/icLock"
                 android:hint="Confirm your password"
+                android:inputType="textPassword"
                 app:layout_constraintLeft_toRightOf="@+id/icLock"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txtConfirmPasswordError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="wrong password"
-                app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword"
-                app:layout_constraintLeft_toLeftOf="@+id/editTextConfirmPassword"
                 android:layout_marginLeft="5dp"
+                android:text="wrong password"
+                android:textColor="@color/red"
                 android:visibility="gone"
-                android:textColor="@color/red"/>
+                app:layout_constraintLeft_toLeftOf="@+id/editTextConfirmPassword"
+                app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <Button
+        android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/confirmPassword"
-        app:layout_constraintRight_toRightOf="@id/confirmPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="80dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
         android:layout_marginTop="100dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginBottom="80dp"
         android:text="Sign Up"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintCircleRadius="20dp"
-        android:id="@+id/btnSignUp" />
+        app:layout_constraintLeft_toLeftOf="@+id/confirmPassword"
+        app:layout_constraintRight_toRightOf="@id/confirmPassword" />
 
     <TextView
+        android:id="@+id/txtAlreadyHaveAnAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtAlreadyHaveAnAccount"
         android:layout_marginTop="7dp"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignUp"
+        android:text="Already have an account? "
         app:layout_constraintLeft_toLeftOf="@+id/btnSignUp"
         app:layout_constraintRight_toRightOf="@+id/btnSignUp"
-        android:text="Already have an account? "/>
+        app:layout_constraintTop_toBottomOf="@+id/btnSignUp" />
 
     <TextView
+        android:id="@+id/txtLogIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtLogIn"
+        android:text="Log in"
         android:textColor="@color/purple_200"
-        app:layout_constraintTop_toTopOf="@+id/txtAlreadyHaveAnAccount"
         app:layout_constraintLeft_toRightOf="@+id/txtAlreadyHaveAnAccount"
-        android:text="Log in"/>
+        app:layout_constraintTop_toTopOf="@+id/txtAlreadyHaveAnAccount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

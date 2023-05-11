@@ -1,13 +1,7 @@
 package com.example.myqueue;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,14 +38,14 @@ public class LogInActivity extends DrawerActivity {
                 //    txtCantLetYouIn.setVisibility(View.VISIBLE);
                 //    return;
                 //}
-                User user = Utils.getInstance(LogInActivity.this).findUserByEmail(editTextLogInEmail.getText().toString());
+                User1 user1 = Utils.getInstance(LogInActivity.this).findUserByEmail(editTextLogInEmail.getText().toString());
 
-                if (null == user) {
+                if (null == user1) {
                     txtCantLetYouIn.setText("There no such user");
                     txtCantLetYouIn.setVisibility(View.VISIBLE);
                     return;
                 }
-                if (!user.getPassword().equals(editTextLogInPassword.getText().toString())) {
+                if (!user1.getPassword().equals(editTextLogInPassword.getText().toString())) {
                     txtCantLetYouIn.setText("Wrong password");
                     txtCantLetYouIn.setVisibility(View.VISIBLE);
                     return;
@@ -66,8 +60,8 @@ public class LogInActivity extends DrawerActivity {
     }
 
     public boolean logIn(String email, String password) {
-        User user = Utils.getInstance(this).findUserByEmail(email);
-        return (null != user && user.getPassword().equals(password));
+        User1 user1 = Utils.getInstance(this).findUserByEmail(email);
+        return (null != user1 && user1.getPassword().equals(password));
     }
 
     public void initViews() {

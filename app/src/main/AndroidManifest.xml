@@ -15,7 +15,7 @@
             android:name=".CreateQueueActivity"
             android:exported="false" />
         <activity
-            android:name=".QueueActivity"
+            android:name=".QueueMembersActivity"
             android:exported="false"
             android:parentActivityName=".QueueListActivity" />
         <activity

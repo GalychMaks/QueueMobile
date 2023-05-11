@@ -52,14 +52,14 @@ public class Utils {
         editor.commit();
     }
 
-    public boolean addUser(User user) {
-        ArrayList<User> userList = getUserList();
-        if (null != userList) {
-            if (userList.add(user)) {
+    public boolean addUser(User1 user1) {
+        ArrayList<User1> user1List = getUserList();
+        if (null != user1List) {
+            if (user1List.add(user1)) {
                 Gson gson = new Gson();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove(ALL_USERS_KEY);
-                editor.putString(ALL_USERS_KEY, gson.toJson(userList));
+                editor.putString(ALL_USERS_KEY, gson.toJson(user1List));
                 editor.commit();
                 return true;
             }
@@ -67,14 +67,14 @@ public class Utils {
         return false;
     }
 
-    public boolean addQueue(Queue queue) {
-        ArrayList<Queue> queueList = getQueueList();
-        if (null != queueList) {
-            if (queueList.add(queue)) {
+    public boolean addQueue(Queue1 queue1) {
+        ArrayList<Queue1> queue1List = getQueueList();
+        if (null != queue1List) {
+            if (queue1List.add(queue1)) {
                 Gson gson = new Gson();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove(ALL_QUEUES_KEY);
-                editor.putString(ALL_QUEUES_KEY, gson.toJson(queueList));
+                editor.putString(ALL_QUEUES_KEY, gson.toJson(queue1List));
                 editor.commit();
                 return true;
             }
@@ -83,63 +83,63 @@ public class Utils {
     }
 
     public void initUsers() {
-        ArrayList<User> userList = new ArrayList<>();
-        userList.add(new User("anton@gmail.com", "anton", "123456"));
-        userList.add(new User("anatoliy@gmail.com", "anatoliy", "123456"));
-        userList.add(new User("larysa@gmail.com", "larysa", "123456"));
+        ArrayList<User1> user1List = new ArrayList<>();
+        user1List.add(new User1("anton@gmail.com", "anton", "123456"));
+        user1List.add(new User1("anatoliy@gmail.com", "anatoliy", "123456"));
+        user1List.add(new User1("larysa@gmail.com", "larysa", "123456"));
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
-        editor.putString(ALL_USERS_KEY, gson.toJson(userList));
+        editor.putString(ALL_USERS_KEY, gson.toJson(user1List));
         editor.commit();
     }
 
     public void initQueues() {
-        ArrayList<Queue> queueList = new ArrayList<>();
-        queueList.add(new Queue("Algorithms", "Lorem ipsum", "2"));
-        Queue queue = new Queue("OOP", "queue for OOP", "1");
-        ArrayList<User> userList = getUserList();
-        for (User user : userList) {
-            queue.addParticipant(user);
+        ArrayList<Queue1> queue1List = new ArrayList<>();
+        queue1List.add(new Queue1("Algorithms", "Lorem ipsum", "2"));
+        Queue1 queue1 = new Queue1("OOP", "queue for OOP", "1");
+        ArrayList<User1> user1List = getUserList();
+        for (User1 user1 : user1List) {
+            queue1.addParticipant(user1);
         }
-        queueList.add(queue);
+        queue1List.add(queue1);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
-        editor.putString(ALL_QUEUES_KEY, gson.toJson(queueList));
+        editor.putString(ALL_QUEUES_KEY, gson.toJson(queue1List));
         editor.commit();
     }
 
-    public ArrayList<User> getUserList() {
+    public ArrayList<User1> getUserList() {
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<User>>() {
+        Type type = new TypeToken<ArrayList<User1>>() {
         }.getType();
-        ArrayList<User> users = gson.fromJson(sharedPreferences.getString(ALL_USERS_KEY, null), type);
-        return users;
+        ArrayList<User1> user1s = gson.fromJson(sharedPreferences.getString(ALL_USERS_KEY, null), type);
+        return user1s;
     }
 
-    public ArrayList<Queue> getQueueList() {
+    public ArrayList<Queue1> getQueueList() {
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<Queue>>(){}.getType();
-        ArrayList<Queue> queues = gson.fromJson(sharedPreferences.getString(ALL_QUEUES_KEY, null), type);
-        return queues;
+        Type type = new TypeToken<ArrayList<Queue1>>(){}.getType();
+        ArrayList<Queue1> queue1s = gson.fromJson(sharedPreferences.getString(ALL_QUEUES_KEY, null), type);
+        return queue1s;
     }
 
-    public User findUserByEmail(String email) {
-        ArrayList<User> userList = getUserList();
-        if (null != userList) {
-            for (User user : userList) {
-                if (user.getEmail().equals(email)) {
-                    return user;
+    public User1 findUserByEmail(String email) {
+        ArrayList<User1> user1List = getUserList();
+        if (null != user1List) {
+            for (User1 user1 : user1List) {
+                if (user1.getEmail().equals(email)) {
+                    return user1;
                 }
             }
         }
         return null;
     }
 
-    public Queue getQueueByName(String name) {
-        ArrayList<Queue> queueList = getQueueList();
-        for (Queue q : queueList) {
+    public Queue1 getQueueByName(String name) {
+        ArrayList<Queue1> queue1List = getQueueList();
+        for (Queue1 q : queue1List) {
             if (q.getName().equals(name)) {
                 return q;
             }

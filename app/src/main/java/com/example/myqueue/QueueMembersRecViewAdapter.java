@@ -1,15 +1,12 @@
 package com.example.myqueue;
 
-
-import static com.example.myqueue.Utils.QUEUE_ID_KEY;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -19,45 +16,44 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class QueueRecViewAdapter extends ListAdapter<Queue, QueueRecViewAdapter.ViewHolder> {
-    private OnItemClickListener listener;
+public class QueueMembersRecViewAdapter extends ListAdapter<User, QueueMembersRecViewAdapter.ViewHolder> {
+    private QueueMembersRecViewAdapter.OnItemClickListener listener;
 
-    protected QueueRecViewAdapter() {
+    protected QueueMembersRecViewAdapter() {
         super(DIFF_CALLBACK);
     }
 
-    private static final DiffUtil.ItemCallback<Queue> DIFF_CALLBACK = new DiffUtil.ItemCallback<Queue>() {
+    private static final DiffUtil.ItemCallback<User> DIFF_CALLBACK = new DiffUtil.ItemCallback<User>() {
         @Override
-        public boolean areItemsTheSame(Queue oldItem, Queue newItem) {
+        public boolean areItemsTheSame(User oldItem, User newItem) {
             return oldItem.getId() == newItem.getId();
         }
 
         @Override
-        public boolean areContentsTheSame(Queue oldItem, Queue newItem) {
+        public boolean areContentsTheSame(User oldItem, User newItem) {
             return oldItem.getName().equals(newItem.getName()) &&
-                    oldItem.getDescription().equals(newItem.getDescription());
+                    oldItem.getEmail().equals(newItem.getEmail());
         }
     };
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.queue_list_item, parent, false);
-        return new ViewHolder(view);
+    public QueueMembersRecViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.queue_participant_item, parent, false);
+        return new QueueMembersRecViewAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        Queue currentQueue = getItem(position);
-        holder.txtQueueName.setText(currentQueue.getName());
+    public void onBindViewHolder(@NonNull QueueMembersRecViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+        User currentUser = getItem(position);
+        holder.txtParticipantName.setText(currentUser.getName());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtQueueName;
-
+        private TextView txtParticipantName;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtQueueName = itemView.findViewById(R.id.txtQueueName);
+            txtParticipantName = itemView.findViewById(R.id.txtParticipantName);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,10 +68,10 @@ public class QueueRecViewAdapter extends ListAdapter<Queue, QueueRecViewAdapter.
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Queue queue);
+        void onItemClick(User user);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(QueueMembersRecViewAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
 }

@@ -1,13 +1,7 @@
 package com.example.myqueue;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,7 +44,7 @@ public class SignUpActivity extends DrawerActivity {
 
                     Utils utils = Utils.getInstance(SignUpActivity.this);
 
-                    if(utils.addUser(new User(editTextEmail.getText().toString(),
+                    if(utils.addUser(new User1(editTextEmail.getText().toString(),
                             editTextUserName.getText().toString(),
                             editTextPassword.getText().toString()))){
 
