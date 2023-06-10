@@ -2,10 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_home" android:title="Home" android:icon="@drawable/ic_home"/>
-        <item android:id="@+id/nav_profile" android:title="Profile" android:icon="@drawable/ic_smile"/>
-        <item android:id="@+id/nav_favoriteQueues" android:title="Favorite Queues" android:icon="@drawable/ic_smile"/>
+        <item android:id="@+id/nav_findQueue" android:title="Find Queue" android:icon="@drawable/ic_smile"/>
         <item android:id="@+id/nav_createQueue" android:title="Create Queue" android:icon="@drawable/ic_smile"/>
-        <item android:id="@+id/nav_setting" android:title="Setting" android:icon="@drawable/ic_smile"/>
+        <item android:id="@+id/nav_setting" android:title="Setting" android:icon="@drawable/ic_setting"/>
         <item android:id="@+id/nav_aboutUs" android:title="About Us" android:icon="@drawable/ic_smile"/>
         <item android:id="@+id/nav_logIn" android:title="Log In" android:icon="@drawable/ic_login"/>
     </group>
