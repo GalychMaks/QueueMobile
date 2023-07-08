@@ -1,64 +1,67 @@
 package com.example.myqueue.DrawerActivity;
 
-import android.app.AlertDialog;
+import static com.example.myqueue.QueueListActivity.QueueListActivity.EXTRA_QUEUE;
+
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 
+import com.example.myqueue.QueueMembersActivity.QueueMembersActivity;
 import com.example.myqueue.R;
+import com.example.myqueue.db.Queue;
+import com.google.gson.Gson;
 
 
-public class SearchQueueDialog extends AppCompatDialogFragment {
-    SearchQueueDialogListener listener;
-    EditText code;
+public class SearchQueueDialog extends Dialog {
+    EditText editTextCode;
+    ProgressBarCallBack progressBarCallBack;
+    DrawerActivityViewModel viewModel;
+    LifecycleOwner lifecycleOwner;
 
-    @NonNull
+    public SearchQueueDialog(Context context, ProgressBarCallBack progressBarCallBack, DrawerActivityViewModel viewModel, LifecycleOwner lifecycleOwner) {
+        super(context);
+        this.progressBarCallBack = progressBarCallBack;
+        this.viewModel = viewModel;
+        this.lifecycleOwner = lifecycleOwner;
+    }
+
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.searsh_queue_dialog);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.searsh_queue_dialog, null);
-        builder.setView(view)
-                .setTitle("Create Queue")
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+        editTextCode = findViewById(R.id.editTextCode);
 
-                    }
-                })
-                .setPositiveButton("search", new DialogInterface.OnClickListener() {
+        Button btnSearchQueue = findViewById(R.id.btnSearch);
+        btnSearchQueue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String code = editTextCode.getText().toString();
+                viewModel.getQueue(progressBarCallBack, code).observe(lifecycleOwner, new Observer<Queue>() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.searchQueue(code.getText().toString());
+                    public void onChanged(Queue queue) {
+                        if (queue == null) {
+                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Log.d("tag", "Must be toast");
+                            return;
+                        }
+                        Gson gson = new Gson();
+                        Intent intent = new Intent(getContext(), QueueMembersActivity.class);
+                        intent.putExtra(EXTRA_QUEUE, gson.toJson(queue));
+                        getContext().startActivity(intent);
                     }
                 });
-
-        code = view.findViewById(R.id.editTextCode);
-
-        return builder.create();
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            listener = (SearchQueueDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() +
-                    "must implement SearchQueueDialogListener");
-        }
-    }
-
-    public interface SearchQueueDialogListener {
-        void searchQueue(String code);
+                dismiss();
+            }
+        });
     }
 }

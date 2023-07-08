@@ -31,22 +31,22 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WebRepository implements Repository {
-    private String URL;
+    private static final String URL = "https://api.quenic.space/";
     public static final int CONNECTION_TIMEOUT = 20; // seconds
     public static final String LOGGED_IN_KEY = "key";
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private MutableLiveData<List<Queue>> myQueues;
     private MutableLiveData<Queue> queue;
     private MutableLiveData<List<GetMembersResponseBodyModel>> members;
+    private final Context context;
 
     public WebRepository(Context context) {
+        this.context = context;
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         Retrofit retrofit;
 
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        URL = "http://" + sharedPreferences.getString("ip", "127.0.0.1") + ":8000/";
 
         if (sharedPreferences.getBoolean(IS_LOGGED_IN, false)) {
             OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
@@ -149,9 +149,6 @@ public class WebRepository implements Repository {
 
                 editor.putBoolean(IS_LOGGED_IN, true);
                 editor.commit();
-
-                Intent intent = new Intent(context, QueueListActivity.class);
-                context.startActivity(intent);
             }
 
             @Override
@@ -199,6 +196,9 @@ public class WebRepository implements Repository {
                 Gson gson = new Gson();
                 editor.putString(LOGGED_IN_USER, gson.toJson(user));
                 editor.apply();
+
+                Intent intent = new Intent(context, QueueListActivity.class);
+                context.startActivity(intent);
             }
 
             @Override
@@ -216,7 +216,7 @@ public class WebRepository implements Repository {
     }
 
     public void updateMyQueues(Context context, ProgressBarCallBack progressBarCallBack, int userId) {
-        Call<List<Queue>> call = jsonPlaceHolderApi.getQueues(userId); // change
+        Call<List<Queue>> call = jsonPlaceHolderApi.getQueues(userId);
         progressBarCallBack.showProgressDialog();
         call.enqueue(new Callback<List<Queue>>() {
             @Override
@@ -304,6 +304,7 @@ public class WebRepository implements Repository {
                 progressBarCallBack.hideProgressDialog();
                 if (!response.isSuccessful()) {
                     Log.d("on get queue response", "code is " + response.code());
+                    queue.postValue(null);
                     return;
                 }
                 queue.postValue(response.body());

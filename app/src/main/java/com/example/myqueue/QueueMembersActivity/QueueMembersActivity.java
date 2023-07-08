@@ -2,7 +2,9 @@ package com.example.myqueue.QueueMembersActivity;
 
 import static com.example.myqueue.LoginActivity.LoginFragment.LOGGED_IN_USER;
 import static com.example.myqueue.QueueListActivity.QueueListActivity.EXTRA_ID;
+import static com.example.myqueue.QueueListActivity.QueueListActivity.EXTRA_QUEUE;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -45,41 +47,41 @@ public class QueueMembersActivity extends DrawerActivity implements QueueMembers
         activityQueueMembersBinding = ActivityQueueMembersBinding.inflate(getLayoutInflater());
         setContentView(activityQueueMembersBinding.getRoot());
 
-
         queueMembersViewModel = new ViewModelProvider(this).get(QueueMembersViewModel.class);
         members = queueMembersViewModel.getMembers();
 
         Intent intent = getIntent();
         if (null != intent) {
-            int queueId = intent.getIntExtra(EXTRA_ID, -1);
-            queueMembersViewModel.getQueue(queueId).observe(this, new Observer<Queue>() {
-                @Override
-                public void onChanged(Queue queue) {
-                    QueueMembersFragment fragment = new QueueMembersFragment();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+            Gson gson = new Gson();
+            currentQueue = gson.fromJson(intent.getStringExtra(EXTRA_QUEUE),
+                    new TypeToken<Queue>() {
+                    }.getType());
+            if (currentQueue != null) {
+                QueueMembersFragment fragment = new QueueMembersFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 
-                    currentQueue = queue;
-                    setTitle(queue.getName());
-                    queueMembersViewModel.updateMembers(QueueMembersActivity.this, QueueMembersActivity.this, currentQueue.getId());
-                }
-            });
+                setTitle(currentQueue.getName());
+                queueMembersViewModel.updateMembers(QueueMembersActivity.this, QueueMembersActivity.this, currentQueue.getId());
+            }
         }
     }
 
     public void joinQueue() {
-        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(IS_LOGGED_IN, false)) {
-            UserModel loggedInUser = queueMembersViewModel.getLoggedInUser(this);
-            if (loggedInUser != null) {
-                if (currentQueue != null) {
-                    queueMembersViewModel.joinQueue(this, this, currentQueue.getId(), new JoinQueueRequestBody(loggedInUser.getId(), currentQueue.getId(), loggedInUser.getId()));
-                } else {
-                    Toast.makeText(this, "wait till queue name will appear", Toast.LENGTH_SHORT).show();
-                }
-            }
-        } else {
+        UserModel loggedInUser = queueMembersViewModel.getLoggedInUser(this);
+        if (loggedInUser == null) {
             Toast.makeText(this, "Error: you not logged in", Toast.LENGTH_SHORT).show();
+            return;
         }
+        if (currentQueue == null) {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        queueMembersViewModel.joinQueue(this,
+                this,
+                currentQueue.getId(),
+                new JoinQueueRequestBody(loggedInUser.getId(),
+                        currentQueue.getId(),
+                        loggedInUser.getId()));
     }
 
     public void leaveQueue() {
@@ -122,7 +124,7 @@ public class QueueMembersActivity extends DrawerActivity implements QueueMembers
     @Override
     public boolean isUserInQueue() {
         UserModel loggedInUser = queueMembersViewModel.getLoggedInUser(this);
-        if(loggedInUser == null || currentQueue == null) {
+        if (loggedInUser == null || currentQueue == null) {
             return false;
         }
         for (GetMembersResponseBodyModel member : members.getValue()) {
@@ -138,8 +140,8 @@ public class QueueMembersActivity extends DrawerActivity implements QueueMembers
             Toast.makeText(this, "Error: try again", Toast.LENGTH_SHORT).show();
             return;
         }
-        DescriptionFragment fragment = new DescriptionFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, "d").commit();
+        DescriptionDialog descriptionDialog = new DescriptionDialog(this, currentQueue);
+        descriptionDialog.show();
     }
 
     @Override

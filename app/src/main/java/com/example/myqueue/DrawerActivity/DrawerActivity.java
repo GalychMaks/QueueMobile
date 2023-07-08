@@ -2,9 +2,11 @@ package com.example.myqueue.DrawerActivity;
 
 import static com.example.myqueue.LoginActivity.LoginFragment.LOGGED_IN_USER;
 import static com.example.myqueue.QueueListActivity.QueueListActivity.EXTRA_ID;
+import static com.example.myqueue.QueueListActivity.QueueListActivity.EXTRA_QUEUE;
 import static com.example.myqueue.api.WebRepository.LOGGED_IN_KEY;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -40,11 +42,12 @@ import java.util.Objects;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class DrawerActivity extends AppCompatActivity implements ProgressBarCallBack, SearchQueueDialog.SearchQueueDialogListener {
+public class DrawerActivity extends AppCompatActivity implements ProgressBarCallBack {
     ActionBarDrawerToggle actionBarDrawerToggle;
     public static final String IS_LOGGED_IN = "com.example.myqueue.IS_LOGGED_IN";
     private SharedPreferences sharedPreferences;
     private NavigationView navigationView;
+    private DrawerActivityViewModel drawerActivityViewModel;
 
     @Override
     public void setContentView(View view) {
@@ -53,11 +56,15 @@ public class DrawerActivity extends AppCompatActivity implements ProgressBarCall
         container.addView(view);
         super.setContentView(drawerLayout);
 
+        drawerActivityViewModel = new ViewModelProvider(this).get(DrawerActivityViewModel.class);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
+        actionBarDrawerToggle.syncState();drawerActivityViewModel = new ViewModelProvider(this).get(DrawerActivityViewModel.class);
 
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+//        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         navigationView = drawerLayout.findViewById(R.id.navView);
 
@@ -78,8 +85,8 @@ public class DrawerActivity extends AppCompatActivity implements ProgressBarCall
                         startActivity(intent);
                         break;
                     case R.id.nav_setting:
-                        startActivity(new Intent(DrawerActivity.this, SettingsActivity.class));
-                        break;
+//                        startActivity(new Intent(DrawerActivity.this, SettingsActivity.class));
+//                        break;
                     case R.id.nav_createQueue:
                     case R.id.nav_findQueue:
                     case R.id.nav_aboutUs:
@@ -117,8 +124,8 @@ public class DrawerActivity extends AppCompatActivity implements ProgressBarCall
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         } else if (item.getItemId() == R.id.btnSearch) {
-            SearchQueueDialog searchQueueDialog = new SearchQueueDialog();
-            searchQueueDialog.show(getSupportFragmentManager(), "search queue dialog");
+            SearchQueueDialog searchQueueDialog = new SearchQueueDialog(this, this, drawerActivityViewModel, this);
+            searchQueueDialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -167,9 +174,7 @@ public class DrawerActivity extends AppCompatActivity implements ProgressBarCall
         }
     }
 
-    @Override
     public void searchQueue(String code) {
-        DrawerActivityViewModel drawerActivityViewModel = new ViewModelProvider(this).get(DrawerActivityViewModel.class);
         drawerActivityViewModel.getQueue(this, code).observe(this, new Observer<Queue>() {
             @Override
             public void onChanged(Queue queue) {
@@ -177,10 +182,10 @@ public class DrawerActivity extends AppCompatActivity implements ProgressBarCall
                     Toast.makeText(DrawerActivity.this, "Error", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Gson gson = new Gson();
                 Intent intent = new Intent(DrawerActivity.this, QueueMembersActivity.class);
-                intent.putExtra(EXTRA_ID, queue.getId());
-                startActivity(intent);
-            }
+                intent.putExtra(EXTRA_QUEUE, gson.toJson(queue));
+                startActivity(intent);}
         });
     }
 }

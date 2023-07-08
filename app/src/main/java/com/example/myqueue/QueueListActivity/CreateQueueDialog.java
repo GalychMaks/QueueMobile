@@ -1,64 +1,61 @@
 package com.example.myqueue.QueueListActivity;
 
-import android.app.AlertDialog;
+import static android.content.Context.MODE_PRIVATE;
+
+import static com.example.myqueue.LoginActivity.LoginFragment.LOGGED_IN_USER;
+
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialogFragment;
-
+import com.example.myqueue.DrawerActivity.ProgressBarCallBack;
 import com.example.myqueue.R;
+import com.example.myqueue.Repository;
+import com.example.myqueue.api.CreateQueueModel;
+import com.example.myqueue.api.UserModel;
+import com.example.myqueue.db.User;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-public class CreateQueueDialog extends AppCompatDialogFragment {
+public class CreateQueueDialog extends Dialog {
 
-    CreateQueueDialogListener listener;
-    EditText queueName, description;
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.create_queue_dialog, null);
-        builder.setView(view)
-                .setTitle("Create Queue")
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                })
-                .setPositiveButton("submit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.createQueue(queueName.getText().toString(), description.getText().toString());
-                    }
-                });
-        queueName = view.findViewById(R.id.editTextQueueName);
-        description = view.findViewById(R.id.editTextDescription);
-
-        return builder.create();
+    private EditText editTextQueueName, editTextDescription;
+    private final QueueListViewModel queueListViewModel;
+    private final ProgressBarCallBack progressBarCallBack;
+    public CreateQueueDialog(Context context, ProgressBarCallBack progressBarCallBack, QueueListViewModel queueListViewModel) {
+        super(context);
+        this.progressBarCallBack = progressBarCallBack;
+        this.queueListViewModel = queueListViewModel;
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            listener = (CreateQueueDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() +
-                    "must implement CreteQueueDialogListener");
-        }
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.create_queue_dialog);
 
-    public interface CreateQueueDialogListener {
-        void createQueue(String queueName, String description);
+        editTextQueueName = findViewById(R.id.editTextQueueName);
+        editTextDescription = findViewById(R.id.editTextDescription);
+
+        Button btnCreateQueue = findViewById(R.id.btnCreateQueue);
+        btnCreateQueue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserModel user = queueListViewModel.getLoggedInUser(getContext());
+                if(user == null) {
+                    Toast.makeText(getContext(), "Error: you not logged in", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String queueName = editTextQueueName.getText().toString();
+                String description = editTextDescription.getText().toString();
+
+                queueListViewModel.createQueue(getContext(), progressBarCallBack, new CreateQueueModel(user.getId(), queueName, description));
+                dismiss();
+            }
+        });
     }
 }

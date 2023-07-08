@@ -2,13 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/grayLight">
 
     <TextView
         android:id="@+id/txtLogIn1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log in"
+        android:text="Sign in"
+        android:textColor="@color/blue"
+        android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+        android:text="Sign in to enjoy all the services!"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/txtLogIn1"
         app:layout_constraintStart_toStartOf="@+id/txtLogIn1"
         app:layout_constraintTop_toBottomOf="@+id/txtLogIn1" />
@@ -28,11 +32,9 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/userName"
+        style="@style/Theme.MyQueue.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="40dp"
-        app:cardCornerRadius="10dp"
         app:layout_constraintLeft_toLeftOf="@+id/txtLogIn2"
         app:layout_constraintRight_toRightOf="@+id/txtLogIn2"
         app:layout_constraintTop_toBottomOf="@+id/txtLogIn2">
@@ -43,36 +45,31 @@
 
             <ImageView
                 android:id="@+id/icUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
                 android:src="@drawable/ic_user"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <EditText
                 android:id="@+id/editTextLogInEmail"
+                style="@style/Theme.MyQueue.CardView.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/icUser"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/icUser"
                 android:hint="Enter your user name"
-                app:layout_constraintLeft_toRightOf="@+id/icUser"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                app:layout_constraintLeft_toRightOf="@+id/icUser" />
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/password"
+        style="@style/Theme.MyQueue.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="20dp"
-        app:cardCornerRadius="10dp"
         app:layout_constraintLeft_toLeftOf="@+id/userName"
         app:layout_constraintRight_toRightOf="@+id/userName"
         app:layout_constraintTop_toBottomOf="@+id/userName">
@@ -84,8 +81,8 @@
 
             <ImageView
                 android:id="@+id/icLock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
@@ -97,27 +94,24 @@
 
             <EditText
                 android:id="@+id/editTextLogInPassword"
+                style="@style/Theme.MyQueue.CardView.EditText.Password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/icLock"
-                android:hint="Enter your password"
-                android:inputType="textPassword"
-                app:layout_constraintLeft_toRightOf="@+id/icLock"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:hint="Enter your password" />
 
+            <ImageView
+                android:id="@+id/showPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_visibility" />
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
-
-    <ImageView
-        android:id="@+id/showPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:src="@drawable/ic_visibility"
-        app:layout_constraintBottom_toBottomOf="@+id/password"
-        app:layout_constraintLeft_toRightOf="@+id/password"
-        app:layout_constraintTop_toTopOf="@+id/password" />
 
     <TextView
         android:id="@+id/txtCantLetYouIn"
@@ -140,7 +134,8 @@
         android:layout_marginTop="100dp"
         android:layout_marginRight="60dp"
         android:layout_marginBottom="80dp"
-        android:text="Log In"
+        android:text="Sign In"
+        app:backgroundTint="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@+id/password"
         app:layout_constraintRight_toRightOf="@id/password" />
@@ -151,6 +146,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
         android:text="Don't have an account? "
+        android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="@+id/btnLogIn"
         app:layout_constraintRight_toRightOf="@+id/btnLogIn"
         app:layout_constraintTop_toBottomOf="@+id/btnLogIn" />

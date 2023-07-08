@@ -3,6 +3,7 @@ package com.example.myqueue.QueueListActivity;
 import static com.example.myqueue.LoginActivity.LoginFragment.LOGGED_IN_USER;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,14 +34,16 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class QueueListActivity extends DrawerActivity implements CreateQueueDialog.CreateQueueDialogListener {
+public class QueueListActivity extends DrawerActivity {
     public static final String EXTRA_ID = "com.example.myqueue.QueueListActivity.EXTRA_ID";
+    public static final String EXTRA_QUEUE = "com.example.myqueue.QueueListActivity.EXTRA_QUEUE";
     private ActivityQueueListBinding activityQueueListBinding;
     private RecyclerView recViewQueueList;
     private QueueListViewModel queueListViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); // turn off the dark mode
         super.onCreate(savedInstanceState);
         activityQueueListBinding = ActivityQueueListBinding.inflate(getLayoutInflater());
         setContentView(activityQueueListBinding.getRoot());
@@ -49,8 +52,8 @@ public class QueueListActivity extends DrawerActivity implements CreateQueueDial
         btnCreateQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreateQueueDialog createQueueDialog = new CreateQueueDialog();
-                createQueueDialog.show(getSupportFragmentManager(), "create queue dialog");
+                CreateQueueDialog createQueueDialog = new CreateQueueDialog(QueueListActivity.this, QueueListActivity.this, queueListViewModel);
+                createQueueDialog.show();
             }
         });
 
@@ -73,7 +76,9 @@ public class QueueListActivity extends DrawerActivity implements CreateQueueDial
         adapter.setOnItemClickListener(new QueueRecViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Queue queue) {
+                Gson gson = new Gson();
                 Intent intent = new Intent(QueueListActivity.this, QueueMembersActivity.class);
+                intent.putExtra(EXTRA_QUEUE, gson.toJson(queue));
                 intent.putExtra(EXTRA_ID, queue.getId());
                 startActivity(intent);
             }
@@ -108,18 +113,5 @@ public class QueueListActivity extends DrawerActivity implements CreateQueueDial
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void createQueue(String queueName, String description) {
-        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(IS_LOGGED_IN, false)) {
-            Gson gson = new Gson();
-            UserModel user = gson.fromJson(sharedPreferences.getString(LOGGED_IN_USER, null), new TypeToken<UserModel>() {
-            }.getType());
-            queueListViewModel.createQueue(this, this, new CreateQueueModel(user.getId(), queueName, description));
-        } else {
-            Toast.makeText(this, "Error: you not logged in", Toast.LENGTH_SHORT).show();
-        }
     }
 }

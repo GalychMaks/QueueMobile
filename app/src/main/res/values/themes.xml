@@ -2,13 +2,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Base application theme. -->
-    <style name="Theme.MyQueue" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="android:statusBarColor" tools:targetApi="21">@color/black</item>
+    <style name="Theme.MyQueue" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">@color/gray</item>
+        <item name="android:textColorPrimary">@color/blue</item>
+        <item name="android:statusBarColor" tools:targetApi="21">@color/gray</item>
     </style>
 
-    <style name="Button" parent="Widget.AppCompat.Button">
+    <style name="Button" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@color/white</item>
-        <item name="android:radius">30dp</item>
+        <item name="backgroundTint">@color/blue</item>
     </style>
 
+    <style name="Theme.MyQueue.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">10dp</item>
+        <item name="android:layout_marginLeft">50dp</item>
+        <item name="android:layout_marginRight">50dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+    </style>
+
+    <style name="Theme.MyQueue.CardView.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">14dp</item>
+        <item name="android:background">@null</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textCursorDrawable">@drawable/black_cursor</item>
+    </style>
+
+    <style name="Theme.MyQueue.CardView.EditText.Password" parent="Theme.MyQueue.CardView.EditText">
+        <item name="android:inputType">textPassword</item>
+    </style>
 </resources>
