@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.queue.R
 import com.example.queue.databinding.FragmentSignUpBinding
@@ -45,28 +46,33 @@ class SignUpFragment : Fragment() {
                     binding.etEmail.text.toString(),
                     binding.etPassword.text.toString(),
                     binding.etPasswordConfirm.text.toString()
-                ), ::onSignUpResponse
-            )
+                )
+            ).observe(viewLifecycleOwner, Observer {
+                when(it) {
+                    is Resource.Success -> {
+                        hideProgressBar()
+                        Toast.makeText(context, "now you can login", Toast.LENGTH_LONG).show()
+                        findNavController().navigate(R.id.action_signUpFragment_to_nav_login)
+                    }
+                    is Resource.Error -> {
+                        hideProgressBar()
+                        Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                    }
+                    is Resource.Loading -> {
+                        showProgressBar()
+                    }
+                }
+            })
         }
-
         return binding.root
     }
 
-    private suspend fun onSignUpResponse(resource: Resource<Response<Void>>) {
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
         binding.progressBar.visibility = View.INVISIBLE
-        when (resource) {
-            is Resource.Success -> {
-                Toast.makeText(context, "Successfully created user", Toast.LENGTH_LONG).show()
-                findNavController().navigate(R.id.action_signUpFragment_to_nav_login)
-            }
-
-            is Resource.Error -> {
-                Toast.makeText(context, resource.message, Toast.LENGTH_LONG).show()
-            }
-
-            else -> {
-            }
-        }
     }
 
     override fun onDestroyView() {
