@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.queue.models.Key
 import com.example.queue.models.LoginRequest
+import com.example.queue.models.QueueModel
 import com.example.queue.models.RegistrationRequest
 import com.example.queue.repository.Repository
 import com.example.queue.util.Constants.Companion.LOGGED_IN_USER_NAME
@@ -27,15 +28,34 @@ class MainViewModel(
 
     private val sharedPreferences =
         app.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
 
     private val _loggedInUserName = MutableLiveData<String>().apply {
         value = sharedPreferences.getString(LOGGED_IN_USER_NAME, "")
     }
     val loggedInUserName: LiveData<String> = _loggedInUserName
+
+    private val _queues = MutableLiveData<Resource<List<QueueModel>>>()
+    val queues: LiveData<Resource<List<QueueModel>>> = _queues
+
+    fun getQueues() = viewModelScope.launch {
+        _queues.postValue(Resource.Loading())
+        try {
+            if (!hasInternetConnection()) {
+                _queues.postValue(Resource.Error("No Internet"))
+            } else {
+                val response = repository.getQueues()
+                if (!response.isSuccessful) {
+                    _queues.postValue(Resource.Error("error" + response.code()))
+                } else {
+                    response.body()?.let {
+                        _queues.postValue(Resource.Success(it))
+                    }
+                }
+            }
+        } catch (t: Throwable) {
+            _queues.postValue(Resource.Error(t.message.toString()))
+        }
+    }
 
     fun login(loginRequest: LoginRequest): LiveData<Resource<Response<Key>>> {
         val resource: MutableLiveData<Resource<Response<Key>>> = MutableLiveData()

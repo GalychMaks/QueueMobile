@@ -8,4 +8,6 @@ class Repository {
     suspend fun login(loginRequest: LoginRequest) = RetrofitInstance.api.login(loginRequest)
     suspend fun registration(registrationRequest: RegistrationRequest) = RetrofitInstance.api.registration(registrationRequest)
     suspend fun logout(authorization: String) = RetrofitInstance.api.logout(authorization)
+    suspend fun getQueues() = RetrofitInstance.api.getQueues()
+
 }

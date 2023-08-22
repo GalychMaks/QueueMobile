@@ -48,7 +48,7 @@ class SignInFragment : Fragment() {
                     binding.etUserName.text.toString(),
                     binding.etPassword.text.toString()
                 )
-            ).observe(viewLifecycleOwner, Observer {
+            ).observe(viewLifecycleOwner) {
                 when(it) {
                     is Resource.Success -> {
                         hideProgressBar()
@@ -62,7 +62,7 @@ class SignInFragment : Fragment() {
                         showProgressBar()
                     }
                 }
-            })
+            }
         }
         return binding.root
     }

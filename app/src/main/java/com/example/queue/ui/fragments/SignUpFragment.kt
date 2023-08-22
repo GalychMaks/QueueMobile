@@ -47,22 +47,24 @@ class SignUpFragment : Fragment() {
                     binding.etPassword.text.toString(),
                     binding.etPasswordConfirm.text.toString()
                 )
-            ).observe(viewLifecycleOwner, Observer {
-                when(it) {
+            ).observe(viewLifecycleOwner) {
+                when (it) {
                     is Resource.Success -> {
                         hideProgressBar()
                         Toast.makeText(context, "now you can login", Toast.LENGTH_LONG).show()
                         findNavController().navigate(R.id.action_signUpFragment_to_nav_login)
                     }
+
                     is Resource.Error -> {
                         hideProgressBar()
                         Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                     }
+
                     is Resource.Loading -> {
                         showProgressBar()
                     }
                 }
-            })
+            }
         }
         return binding.root
     }
