@@ -42,7 +42,6 @@ class SignInFragment : Fragment() {
         }
 
         binding.btnSignIn.setOnClickListener {
-            binding.progressBar.visibility = View.VISIBLE
             viewModel.login(
                 LoginRequest(
                     binding.etUserName.text.toString(),

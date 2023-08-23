@@ -15,6 +15,10 @@
     <string name="menu_sign_in_sign_up">Sign in/Sign up</string>
     <string name="menu_logout">Logout</string>
 
+    <string name="queue_name">Queue Name</string>
+    <string name="description">Description</string>
+    <string name="create_queue">Create Queue</string>
+    <string name="submit">submit</string>
     <string name="create_an_account">Create An Account</string>
     <string name="enter_your_email_address">Enter your email address</string>
     <string name="enter_your_user_name">Enter your user name</string>
