@@ -13,6 +13,7 @@ import com.example.queue.models.CreateQueueRequestModel
 import com.example.queue.models.CreateQueueResponseModel
 import com.example.queue.models.Key
 import com.example.queue.models.LoginRequest
+import com.example.queue.models.MemberModel
 import com.example.queue.models.QueueModel
 import com.example.queue.models.RegistrationRequest
 import com.example.queue.repository.Repository
@@ -38,6 +39,29 @@ class MainViewModel(
 
     private val _queues = MutableLiveData<Resource<List<QueueModel>>>()
     val queues: LiveData<Resource<List<QueueModel>>> = _queues
+
+    private val _members = MutableLiveData<Resource<List<MemberModel>>>()
+    val members: LiveData<Resource<List<MemberModel>>> = _members
+
+    fun getMembers(queueId: Int) = viewModelScope.launch {
+        _members.postValue(Resource.Loading())
+        try {
+            if (!hasInternetConnection()) {
+                _members.postValue(Resource.Error("No Internet"))
+            } else {
+                val response = repository.getMembers(queueId)
+                if (!response.isSuccessful) {
+                    _members.postValue(Resource.Error("error" + response.code()))
+                } else {
+                    response.body()?.let {
+                        _members.postValue(Resource.Success(it))
+                    }
+                }
+            }
+        } catch (t: Throwable) {
+            _members.postValue(Resource.Error(t.message.toString()))
+        }
+    }
 
     fun getQueues() = viewModelScope.launch {
         _queues.postValue(Resource.Loading())

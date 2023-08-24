@@ -5,6 +5,7 @@ import com.example.queue.models.CreateQueueResponseModel
 import com.example.queue.models.GetLoggedInUserResponse
 import com.example.queue.models.Key
 import com.example.queue.models.LoginRequest
+import com.example.queue.models.MemberModel
 import com.example.queue.models.QueueModel
 import com.example.queue.models.RegistrationRequest
 import retrofit2.Response
@@ -12,6 +13,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface API {
     @POST("dj-rest-auth/login/")
@@ -28,6 +30,9 @@ interface API {
 
     @GET("queues/")
     suspend fun getQueues(): Response<List<QueueModel>>
+
+    @GET("queues/{queue_id}/members/")
+    suspend fun getMembers(@Path("queue_id") queueId: Int): Response<List<MemberModel>>
 
     @POST("queues/")
     suspend fun createQueue(@Body createQueueModel: CreateQueueRequestModel): Response<CreateQueueResponseModel>

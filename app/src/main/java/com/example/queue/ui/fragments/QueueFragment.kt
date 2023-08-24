@@ -1,28 +1,25 @@
 package com.example.queue.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.queue.R
-import com.example.queue.adapters.QueueAdapter
-import com.example.queue.databinding.FragmentHomeBinding
+import com.example.queue.adapters.MemberAdapter
+import com.example.queue.databinding.FragmentQueueBinding
 import com.example.queue.ui.MainActivity
 import com.example.queue.ui.MainViewModel
 import com.example.queue.util.Resource
 
-class HomeFragment : Fragment() {
+class QueueFragment : Fragment() {
 
     lateinit var viewModel: MainViewModel
-    private var _binding: FragmentHomeBinding? = null
-    lateinit var queueAdapter: QueueAdapter
+    private var _binding: FragmentQueueBinding? = null
+    private val args: QueueFragmentArgs by navArgs()
+    lateinit var memberAdapter: MemberAdapter
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -33,27 +30,17 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentQueueBinding.inflate(inflater, container, false)
 
         viewModel = (activity as MainActivity).viewModel
         setUpRecyclerView()
 
-        queueAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("queue", it)
-            }
-            findNavController().navigate(
-                R.id.action_nav_home_to_queueFragment,
-                bundle
-            )
-        }
-
-        viewModel.queues.observe(viewLifecycleOwner) { response ->
+        viewModel.members.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let {
-                        queueAdapter.differ.submitList(it)
+                        memberAdapter.differ.submitList(it)
                     }
                 }
 
@@ -70,9 +57,12 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        viewModel.getQueues()
+
+        viewModel.getMembers(args.queue.id)
+
         return binding.root
     }
+
 
     private fun hideProgressBar() {
         binding.progressBar.visibility = View.INVISIBLE
@@ -88,9 +78,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        queueAdapter = QueueAdapter()
-        binding.rvQueues.apply {
-            adapter = queueAdapter
+        memberAdapter = MemberAdapter()
+        binding.rvMembers.apply {
+            adapter = memberAdapter
             layoutManager = LinearLayoutManager(activity)
         }
     }
