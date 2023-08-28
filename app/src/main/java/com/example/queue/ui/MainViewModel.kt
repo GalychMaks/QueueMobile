@@ -126,30 +126,20 @@ class MainViewModel(
                     resource.postValue(Resource.Error("No Internet"))
                     return@launch
                 }
-                val responseGetUser = repository.getLoggedInUser(
-                    "Token ${
-                        sharedPreferences.getString(
-                            TOKEN_KEY,
-                            ""
-                        )
-                    }"
-                )
-                if (responseGetUser.isSuccessful) {
-                    val response = repository.createQueue(CreateQueueRequestModel(
-                        responseGetUser.body()?.pk ?: 0,
+                val response = repository.createQueue(
+                    CreateQueueRequestModel(
                         createQueueRequestModel.name,
                         createQueueRequestModel.description,
-                    ))
-                    if (response.isSuccessful) {
-                        response.body()?.let {
-                            resource.postValue(Resource.Success(it))
-                        }
-                    } else {
-                        resource.postValue(Resource.Error("error " + responseGetUser.code()))
+                    ), "Token ${sharedPreferences.getString(TOKEN_KEY, "")}"
+                )
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        resource.postValue(Resource.Success(it))
                     }
                 } else {
-                    resource.postValue(Resource.Error("error while getting user " + responseGetUser.code()))
+                    resource.postValue(Resource.Error("error " + response.code()))
                 }
+
             } catch (t: Throwable) {
                 resource.postValue(Resource.Error("Exception"))
             }

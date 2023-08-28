@@ -35,21 +35,22 @@ class CreateQueueFragment : Fragment() {
         binding.btnSubmit.setOnClickListener {
             viewModel.createQueue(
                 CreateQueueRequestModel(
-                    0,
                     binding.etQueueName.text.toString(),
                     binding.etDescription.text.toString()
                 )
             ).observe(viewLifecycleOwner) {
-                when(it) {
+                when (it) {
                     is Resource.Success -> {
                         hideProgressBar()
                         Toast.makeText(context, "Queue created", Toast.LENGTH_LONG).show()
                         findNavController().navigate(R.id.nav_home)
                     }
+
                     is Resource.Error -> {
                         hideProgressBar()
                         Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                     }
+
                     is Resource.Loading -> {
                         showProgressBar()
                     }

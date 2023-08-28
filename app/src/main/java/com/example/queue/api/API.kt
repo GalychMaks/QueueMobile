@@ -35,5 +35,5 @@ interface API {
     suspend fun getMembers(@Path("queue_id") queueId: Int): Response<List<MemberModel>>
 
     @POST("queues/")
-    suspend fun createQueue(@Body createQueueModel: CreateQueueRequestModel): Response<CreateQueueResponseModel>
+    suspend fun createQueue(@Body createQueueModel: CreateQueueRequestModel, @Header("Authorization") authorization: String): Response<CreateQueueResponseModel>
 }
