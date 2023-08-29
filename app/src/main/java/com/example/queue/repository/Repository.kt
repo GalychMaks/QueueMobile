@@ -15,6 +15,7 @@ class Repository {
         RetrofitInstance.api.getLoggedInUser(authorization)
 
     suspend fun getQueues() = RetrofitInstance.api.getQueues()
+    suspend fun getQueue(code: String) = RetrofitInstance.api.getQueue(code)
     suspend fun createQueue(
         createQueueRequestModel: CreateQueueRequestModel,
         authorization: String

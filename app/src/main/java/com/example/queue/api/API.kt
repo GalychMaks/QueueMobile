@@ -1,7 +1,6 @@
 package com.example.queue.api
 
 import com.example.queue.models.CreateQueueRequestModel
-import com.example.queue.models.CreateQueueResponseModel
 import com.example.queue.models.GetLoggedInUserResponse
 import com.example.queue.models.Key
 import com.example.queue.models.LoginRequest
@@ -30,6 +29,9 @@ interface API {
 
     @GET("queues/")
     suspend fun getQueues(): Response<List<QueueModel>>
+
+    @GET("queues/search/{code}/")
+    suspend fun getQueue(@Path("code") code: String): Response<QueueModel>
 
     @GET("queues/{queue_id}/members/")
     suspend fun getMembers(@Path("queue_id") queueId: Int): Response<List<MemberModel>>

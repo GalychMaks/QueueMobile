@@ -29,5 +29,8 @@
     <string name="sign_in">Sign in</string>
     <string name="dont_have_an_account">Don\'t have an account?</string>
     <string name="unknown_user">Unknown User</string>
+    <string name="find_queue">Find Queue</string>
+    <string name="enter_queue_code">Enter queue code</string>
+
 
 </resources>

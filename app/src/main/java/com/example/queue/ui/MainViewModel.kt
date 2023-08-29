@@ -10,7 +10,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.queue.models.CreateQueueRequestModel
-import com.example.queue.models.CreateQueueResponseModel
 import com.example.queue.models.Key
 import com.example.queue.models.LoginRequest
 import com.example.queue.models.MemberModel
@@ -127,11 +126,34 @@ class MainViewModel(
                     return@launch
                 }
                 val response = repository.createQueue(
-                    CreateQueueRequestModel(
-                        createQueueRequestModel.name,
-                        createQueueRequestModel.description,
-                    ), "Token ${sharedPreferences.getString(TOKEN_KEY, "")}"
+                    createQueueRequestModel,
+                    "Token ${sharedPreferences.getString(TOKEN_KEY, "")}"
                 )
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        resource.postValue(Resource.Success(it))
+                    }
+                } else {
+                    resource.postValue(Resource.Error("error " + response.code()))
+                }
+
+            } catch (t: Throwable) {
+                resource.postValue(Resource.Error("Exception"))
+            }
+        }
+        return resource
+    }
+
+    fun getQueue(code: String): LiveData<Resource<QueueModel>> {
+        val resource: MutableLiveData<Resource<QueueModel>> = MutableLiveData()
+        viewModelScope.launch {
+            resource.postValue(Resource.Loading())
+            try {
+                if (!hasInternetConnection()) {
+                    resource.postValue(Resource.Error("No Internet"))
+                    return@launch
+                }
+                val response = repository.getQueue(code)
                 if (response.isSuccessful) {
                     response.body()?.let {
                         resource.postValue(Resource.Success(it))
