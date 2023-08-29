@@ -117,8 +117,8 @@ class MainViewModel(
         }
     }
 
-    fun createQueue(createQueueRequestModel: CreateQueueRequestModel): LiveData<Resource<CreateQueueResponseModel>> {
-        val resource: MutableLiveData<Resource<CreateQueueResponseModel>> = MutableLiveData()
+    fun createQueue(createQueueRequestModel: CreateQueueRequestModel): LiveData<Resource<QueueModel>> {
+        val resource: MutableLiveData<Resource<QueueModel>> = MutableLiveData()
         viewModelScope.launch {
             resource.postValue(Resource.Loading())
             try {

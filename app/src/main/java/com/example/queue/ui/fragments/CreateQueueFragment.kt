@@ -43,7 +43,13 @@ class CreateQueueFragment : Fragment() {
                     is Resource.Success -> {
                         hideProgressBar()
                         Toast.makeText(context, "Queue created", Toast.LENGTH_LONG).show()
-                        findNavController().navigate(R.id.nav_home)
+                        val bundle = Bundle().apply {
+                            putSerializable("queue", it.data)
+                        }
+                        findNavController().navigate(
+                            R.id.action_nav_create_queue_to_queueFragment,
+                            bundle
+                        )
                     }
 
                     is Resource.Error -> {
