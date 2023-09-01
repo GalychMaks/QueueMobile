@@ -9,6 +9,7 @@ import com.example.queue.models.QueueModel
 import com.example.queue.models.RegistrationRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -38,4 +39,7 @@ interface API {
 
     @POST("queues/")
     suspend fun createQueue(@Body createQueueModel: CreateQueueRequestModel, @Header("Authorization") authorization: String): Response<QueueModel>
+
+    @DELETE("queues/{queue_id}/")
+    suspend fun deleteQueue(@Path("queue_id") queueId: Int, @Header("Authorization") authorization: String): Response<Void>
 }

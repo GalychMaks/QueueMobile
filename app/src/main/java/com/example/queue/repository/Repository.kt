@@ -21,6 +21,11 @@ class Repository {
         authorization: String
     ) = RetrofitInstance.api.createQueue(createQueueRequestModel, authorization)
 
+    suspend fun deleteQueue(
+        queueId: Int,
+        authorization: String
+    ) = RetrofitInstance.api.deleteQueue(queueId, authorization)
+
     suspend fun getMembers(queueId: Int) = RetrofitInstance.api.getMembers(queueId)
 
 }

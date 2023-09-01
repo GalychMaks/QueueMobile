@@ -1,6 +1,7 @@
 package com.example.queue.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -8,10 +9,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.queue.R
@@ -40,6 +43,7 @@ class QueueFragment : Fragment() {
         _binding = FragmentQueueBinding.inflate(inflater, container, false)
         setupMenu()
         setUpRecyclerView()
+        setTitle(args.queue.name)
 
         viewModel = (activity as MainActivity).viewModel
 
@@ -71,9 +75,31 @@ class QueueFragment : Fragment() {
         return binding.root
     }
 
+    private fun setTitle(title: String) {
+        requireActivity().findViewById<Toolbar>(R.id.toolbar)?.title = title
+        requireActivity().invalidateOptionsMenu()
+    }
+
     private fun deleteQueue() {
-        // TODO: ("Not yet implemented")
-        Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+        viewModel.deleteQueue(args.queue.id).observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    Toast.makeText(context, getString(R.string.queue_deleted), Toast.LENGTH_SHORT)
+                        .show()
+                    findNavController().navigateUp()
+                }
+
+                is Resource.Error -> {
+                    hideProgressBar()
+                    Toast.makeText(context, resource.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
+        }
     }
 
     private fun hideProgressBar() {
@@ -97,12 +123,14 @@ class QueueFragment : Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                when (menuItem.itemId) {
+                return when (menuItem.itemId) {
                     R.id.menu_delete_queue -> {
                         deleteQueue()
+                        true
                     }
+
+                    else -> false
                 }
-                return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }

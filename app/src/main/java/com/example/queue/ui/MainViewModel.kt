@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.queue.R
 import com.example.queue.models.CreateQueueRequestModel
 import com.example.queue.models.Key
 import com.example.queue.models.LoginRequest
@@ -142,6 +143,31 @@ class MainViewModel(
             }
         }
         return resource
+    }
+
+    fun deleteQueue(queueId: Int): LiveData<Resource<Unit>> {
+        val res: MutableLiveData<Resource<Unit>> = MutableLiveData()
+        viewModelScope.launch {
+            res.postValue(Resource.Loading())
+            try {
+                if (!hasInternetConnection()) {
+                    res.postValue(Resource.Error("No Internet"))
+                    return@launch
+                }
+                val response = repository.deleteQueue(
+                    queueId,
+                    "Token ${sharedPreferences.getString(TOKEN_KEY, "")}"
+                )
+                if (response.isSuccessful) {
+                    res.postValue(Resource.Success(Unit))
+                } else {
+                    res.postValue(Resource.Error("error" + response.code()))
+                }
+            } catch (t: Throwable) {
+                res.postValue(t.message?.let { Resource.Error(it) })
+            }
+        }
+        return res
     }
 
     fun getQueue(code: String): LiveData<Resource<QueueModel>> {

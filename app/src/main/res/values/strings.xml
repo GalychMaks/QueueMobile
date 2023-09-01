@@ -32,6 +32,7 @@
     <string name="find_queue">Find Queue</string>
     <string name="enter_queue_code">Enter queue code</string>
     <string name="menu_delete_queue">Delete queue</string>
+    <string name="queue_deleted">Queue deleted</string>
 
 
 </resources>
