@@ -40,7 +40,7 @@ class FindQueueFragment : Fragment() {
                             putSerializable("queue", it.data)
                         }
                         findNavController().navigate(
-                            R.id.queueFragment,
+                            R.id.nav_queue,
                             bundle
                         )
                     }

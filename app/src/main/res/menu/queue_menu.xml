@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/main"
+        android:id="@+id/menu_delete_queue"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/menu_delete_queue"
         app:showAsAction="never"/>
 </menu>

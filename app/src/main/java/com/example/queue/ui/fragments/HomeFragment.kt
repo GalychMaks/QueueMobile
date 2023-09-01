@@ -1,14 +1,11 @@
 package com.example.queue.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.queue.R
@@ -43,7 +40,7 @@ class HomeFragment : Fragment() {
                 putSerializable("queue", it)
             }
             findNavController().navigate(
-                R.id.action_nav_home_to_queueFragment,
+                R.id.action_nav_home_to_nav_queue,
                 bundle
             )
         }

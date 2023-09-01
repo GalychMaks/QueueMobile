@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -54,6 +55,9 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            invalidateOptionsMenu()
+        }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
@@ -86,8 +90,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.loggedInUserName.observe(this, Observer { newName ->
             val menuLogin = navView.menu.findItem(R.id.nav_sign_in)
             val menuLogout = navView.menu.findItem(R.id.logout)
-            val headerUsername = navView.getHeaderView(0).findViewById<TextView>(R.id.header_username)
-            if(newName.isEmpty()) {
+            val headerUsername =
+                navView.getHeaderView(0).findViewById<TextView>(R.id.header_username)
+            if (newName.isEmpty()) {
                 menuLogin.isVisible = true
                 menuLogout.isVisible = false
                 headerUsername.text = getString(R.string.unknown_user)
@@ -97,16 +102,12 @@ class MainActivity : AppCompatActivity() {
                 headerUsername.text = newName
             }
 
+
             sharedPreferences.edit().apply {
                 this.putString(Constants.LOGGED_IN_USER_NAME, newName)
                 this.apply()
             }
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {

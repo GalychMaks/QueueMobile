@@ -2,12 +2,19 @@ package com.example.queue.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.queue.R
 import com.example.queue.adapters.MemberAdapter
 import com.example.queue.databinding.FragmentQueueBinding
 import com.example.queue.ui.MainActivity
@@ -31,9 +38,10 @@ class QueueFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentQueueBinding.inflate(inflater, container, false)
+        setupMenu()
+        setUpRecyclerView()
 
         viewModel = (activity as MainActivity).viewModel
-        setUpRecyclerView()
 
         viewModel.members.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -63,6 +71,10 @@ class QueueFragment : Fragment() {
         return binding.root
     }
 
+    private fun deleteQueue() {
+        // TODO: ("Not yet implemented")
+        Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+    }
 
     private fun hideProgressBar() {
         binding.progressBar.visibility = View.INVISIBLE
@@ -72,9 +84,27 @@ class QueueFragment : Fragment() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // TODO: ("menu.findItem(R.id.menu_delete_queue).isVisible =
+                //  loggedInUser.id == creator.id")
+                super.onPrepareMenu(menu)
+            }
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.queue_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.menu_delete_queue -> {
+                        deleteQueue()
+                    }
+                }
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun setUpRecyclerView() {
@@ -83,5 +113,10 @@ class QueueFragment : Fragment() {
             adapter = memberAdapter
             layoutManager = LinearLayoutManager(activity)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
