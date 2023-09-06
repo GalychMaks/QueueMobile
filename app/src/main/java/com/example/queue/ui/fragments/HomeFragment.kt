@@ -31,8 +31,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
         viewModel = (activity as MainActivity).viewModel
+
         setUpRecyclerView()
 
         queueAdapter.setOnItemClickListener {
@@ -45,6 +45,12 @@ class HomeFragment : Fragment() {
             )
         }
 
+        observeQueues()
+        viewModel.getQueues()
+        return binding.root
+    }
+
+    private fun observeQueues() {
         viewModel.queues.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
@@ -67,8 +73,6 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        viewModel.getQueues()
-        return binding.root
     }
 
     private fun hideProgressBar() {

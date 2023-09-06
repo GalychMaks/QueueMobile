@@ -41,12 +41,20 @@ class QueueFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentQueueBinding.inflate(inflater, container, false)
-        setupMenu()
-        setUpRecyclerView()
-        setTitle(args.queue.name)
-
         viewModel = (activity as MainActivity).viewModel
 
+        setUpRecyclerView()
+        setupMenu()
+        setTitle(args.queue.name)
+
+        observeMembers()
+
+        viewModel.getMembers(args.queue.id)
+
+        return binding.root
+    }
+
+    private fun observeMembers() {
         viewModel.members.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
@@ -69,10 +77,6 @@ class QueueFragment : Fragment() {
                 }
             }
         }
-
-        viewModel.getMembers(args.queue.id)
-
-        return binding.root
     }
 
     private fun setTitle(title: String) {
@@ -113,8 +117,11 @@ class QueueFragment : Fragment() {
     private fun setupMenu() {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
-                // TODO: ("menu.findItem(R.id.menu_delete_queue).isVisible =
-                //  loggedInUser.id == creator.id")
+                viewModel.loggedInUser.value?.let {
+                    if (args.queue.creator == it.pk) {
+                        menu.findItem(R.id.menu_delete_queue).isVisible = true
+                    }
+                }
                 super.onPrepareMenu(menu)
             }
 
@@ -126,6 +133,11 @@ class QueueFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.menu_delete_queue -> {
                         deleteQueue()
+                        true
+                    }
+
+                    R.id.menu_share_queue -> {
+                        Toast.makeText(context, R.string.not_implemented, Toast.LENGTH_SHORT).show()
                         true
                     }
 
