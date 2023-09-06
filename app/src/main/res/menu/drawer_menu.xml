@@ -24,14 +24,5 @@
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_about" />
-        <item
-            android:id="@+id/nav_sign_in"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_sign_in_sign_up" />
-        <item
-            android:id="@+id/logout"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_logout"
-            android:visible="false"/>
     </group>
 </menu>

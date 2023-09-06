@@ -23,7 +23,10 @@ import com.example.queue.R
 import com.example.queue.databinding.ActivityMainBinding
 import com.example.queue.repository.Repository
 import com.example.queue.util.Constants
+import com.example.queue.util.Constants.Companion.AUTHORIZATION_TOKEN
+import com.example.queue.util.Constants.Companion.LOGGED_IN_USER
 import com.example.queue.util.Constants.Companion.SHARED_PREFERENCES
+import com.example.queue.util.toJson
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,20 +49,9 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-//        // Code for floating button
-//        binding.appBarMain.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
-
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         navController = findNavController(R.id.nav_host_fragment_content_main)
-        navController.addOnDestinationChangedListener { _, _, _ ->
-            invalidateOptionsMenu()
-        }
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_create_queue, R.id.nav_find_queue,
@@ -69,48 +61,34 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        navView.setNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.logout -> {
-                    viewModel.logout()
-
-                    navController.navigate(R.id.nav_sign_in)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
-
-                else -> {
-                    NavigationUI.onNavDestinationSelected(it, navController)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
-            }
-        }
-
-        viewModel.loggedInUserName.observe(this, Observer { newName ->
-            val menuLogin = navView.menu.findItem(R.id.nav_sign_in)
-            val menuLogout = navView.menu.findItem(R.id.logout)
-            val headerUsername =
-                navView.getHeaderView(0).findViewById<TextView>(R.id.header_username)
-            if (newName.isEmpty()) {
-                menuLogin.isVisible = true
-                menuLogout.isVisible = false
-                headerUsername.text = getString(R.string.unknown_user)
-            } else {
-                menuLogin.isVisible = false
-                menuLogout.isVisible = true
-                headerUsername.text = newName
-            }
-
-
-            sharedPreferences.edit().apply {
-                this.putString(Constants.LOGGED_IN_USER_NAME, newName)
-                this.apply()
-            }
-        })
+        observeLoggedInUser()
+        observeAuthorizationToken()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun observeLoggedInUser() {
+        viewModel.loggedInUser.observe(this) { user ->
+            val headerUsername =
+                binding.navView.getHeaderView(0).findViewById<TextView>(R.id.header_username)
+
+            headerUsername.text = user?.username ?: getString(R.string.unknown_user)
+
+            sharedPreferences.edit().apply {
+                this.putString(LOGGED_IN_USER, user.toJson())
+                this.apply()
+            }
+        }
+    }
+
+    private fun observeAuthorizationToken() {
+        viewModel.authorizationToken.observe(this) { token ->
+            sharedPreferences.edit().apply {
+                this.putString(AUTHORIZATION_TOKEN, token)
+                this.apply()
+            }
+        }
     }
 }

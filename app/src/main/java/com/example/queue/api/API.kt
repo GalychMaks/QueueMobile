@@ -7,6 +7,7 @@ import com.example.queue.models.LoginRequest
 import com.example.queue.models.MemberModel
 import com.example.queue.models.QueueModel
 import com.example.queue.models.RegistrationRequest
+import com.example.queue.models.UserModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -26,7 +27,7 @@ interface API {
     suspend fun logout(@Header("Authorization") authorization: String): Response<Void>
 
     @GET("dj-rest-auth/user/")
-    suspend fun getLoggedInUser(@Header("Authorization") authorization: String): Response<GetLoggedInUserResponse>
+    suspend fun getLoggedInUser(@Header("Authorization") authorization: String): Response<UserModel>
 
     @GET("queues/")
     suspend fun getQueues(): Response<List<QueueModel>>
